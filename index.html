@@ -97,14 +97,14 @@
 <script>
   // Set the date we're counting down to
   // var countDownDate = new Date("Aug 20, 2023 23:11:00").getTime();
-  let startTime = localStorage.getItem('startTime'); 
+  let startTime = sessionStorage.getItem('startTime'); 
   if (!startTime) {
     startTime = Date.now(); // If start time is not in localStorage, set it to the current time
-    localStorage.setItem('startTime', startTime);
+    sessionStorage.setItem('startTime', startTime);
   }
   function reset() {
     startTime=Date.now()
-    localStorage.setItem('startTime',startTime);  
+    sessionStorage.setItem('startTime',startTime);  
   }
   // Update the count down every 1 second
   var x = setInterval(function () {
