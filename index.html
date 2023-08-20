@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hack4Change Hackathon Timer</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
 
   <style>
     html body {
-      font-family: 'Monoton', sans-serif;
+      font-family: sans-serif;
       background-color: white;
     }
 
@@ -85,6 +85,7 @@
   </clock>
 
   <footer>
+    <button type="button" class="btn btn-danger" onclick="reset()">Reset</button>
     <p class="now text-muted" id="now"></p>
     <p class="now text-muted">T-Hub and Google</p>
   </footer>
@@ -95,28 +96,38 @@
 
 <script>
   // Set the date we're counting down to
-  var countDownDate = new Date("Aug 20, 2023 23:11:00").getTime();
+  // var countDownDate = new Date("Aug 20, 2023 23:11:00").getTime();
+  let startTime = sessionStorage.getItem('startTime'); 
+  if (!startTime) {
+    startTime = Date.now(); // If start time is not in localStorage, set it to the current time
+    sessionStorage.setItem('startTime', startTime);
+  }
+  function reset() {
+    startTime=Date.now()
+    sessionStorage.setItem('startTime',startTime);  
+  }
   // Update the count down every 1 second
   var x = setInterval(function () {
+    let currentTime = Date.now();
+        let elapsedTime = currentTime - startTime;
 
-    // Get todays date and time
-    var now = new Date().getTime();
-    // console.log(new Date())
-    // Find the distance between now and the count down date
-    var distance = countDownDate - now;
+    // // Get todays date and time
+    // var now = new Date().getTime();
+    // // console.log(new Date())
+    // // Find the distance between now and the count down date
+    // var distance = countDownDate - now;
 
     // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    var hours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
 
     // Output the result in an element with id="demo"
-    document.getElementById("timer").innerHTML =hours + "h  "
-      + minutes + "m  " + seconds + "s ";
+    document.getElementById("timer").innerHTML =`${hours.toString()}` + "h  "
+      + `${minutes.toString()}` + "m  " + `${seconds.toString()}` + "s ";
     document.getElementById("now").innerHTML = new Date();
     // If the count down is over, write some text 
-    if (distance < 0) {
+    if (hours==24 && seconds==0 && minutes==0) {
       clearInterval(x);
       document.getElementById("timer").innerHTML = "Time Up!";
     }
